@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hybrid Todo</string>
+    <string name="widget_title">待办事项</string>
+    <string name="no_tasks">No tasks, relax!</string>
+</resources>
