@@ -75,7 +75,8 @@ class TodoListWidget : AppWidgetProvider() {
             // Set up the collection
             val intent = Intent(context, WidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+                // Unique data URI per widget to avoid RemoteViewsFactory re-use/cache issues
+                data = Uri.parse("hybridtodo://widget/$appWidgetId")
             }
             views.setRemoteAdapter(R.id.widget_list, intent)
             views.setEmptyView(R.id.widget_list, R.id.empty_view)

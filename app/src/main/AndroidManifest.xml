@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".HybridTodoApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,7 +29,7 @@
         <!-- Widget Receiver -->
         <receiver
             android:name=".widget.TodoListWidget"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.hybridtodo.ACTION_REFRESH" />
@@ -43,7 +44,8 @@
         <!-- Widget Service -->
         <service
             android:name=".widget.WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="true" />
 
     </application>
 

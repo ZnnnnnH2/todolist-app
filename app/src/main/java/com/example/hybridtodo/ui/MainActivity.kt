@@ -6,6 +6,12 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hybridtodo.R
 import com.example.hybridtodo.databinding.ActivityMainBinding
+import android.content.Context
+import android.content.Intent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import com.example.hybridtodo.widget.TodoListWidget
+import com.example.hybridtodo.data.local.CookieStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +38,24 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    // Force sync cookies to storage so Widget can read them
                     android.webkit.CookieManager.getInstance().flush()
+
+                    // Save Cookie to SharedPreferences
+                    val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+                    if (!cookie.isNullOrEmpty()) {
+                        val prefs = getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
+                        prefs.edit().putString("cookie", cookie).apply()
+                        
+                        // Also update CookieStore for consistency if needed, but relying on prefs now
+                        CookieStore.saveCookie(cookie)
+
+                        // Notify Widget to refresh data (trigger onDataSetChanged)
+                        val appWidgetManager = AppWidgetManager.getInstance(application)
+                        val ids = appWidgetManager.getAppWidgetIds(ComponentName(application, TodoListWidget::class.java))
+                        
+                        // This triggers onDataSetChanged in WidgetRemoteViewsFactory
+                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list)
+                    }
                 }
             }
 

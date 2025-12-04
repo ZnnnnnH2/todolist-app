@@ -2,6 +2,7 @@ package com.example.hybridtodo.widget
 
 import android.content.Context
 import android.content.Intent
+import android.os.Binder
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
@@ -9,6 +10,7 @@ import android.widget.RemoteViewsService
 import com.example.hybridtodo.R
 import com.example.hybridtodo.data.model.Task
 import com.example.hybridtodo.data.repository.TaskRepository
+import com.example.hybridtodo.data.remote.RetrofitClient
 import kotlinx.coroutines.runBlocking
 
 class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
@@ -20,41 +22,59 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
     }
 
     override fun onDataSetChanged() {
-        // Fetch data synchronously
         Log.d("WidgetFactory", "onDataSetChanged called")
         
-        // Check for cookies
-        val url = "http://20.193.248.140/"
-        val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+        // Initialize RetrofitClient
+        RetrofitClient.init(context)
         
-        if (cookie.isNullOrEmpty()) {
-            Log.e("WidgetFactory", "Cookie is missing")
-            taskList = listOf(
-                Task(
-                    id = "error_login",
-                    title = "未登录，请打开App刷新",
-                    isCompleted = false,
-                    priority = "High"
-                )
-            )
-            return
-        }
-
-        runBlocking {
-            try {
-                taskList = TaskRepository.fetchTasks()
-                Log.d("WidgetFactory", "Fetched ${taskList.size} tasks")
-            } catch (e: Exception) {
-                Log.e("WidgetFactory", "Error fetching tasks", e)
+        val identity = Binder.clearCallingIdentity()
+        try {
+            // Check for cookies from SharedPreferences
+            val prefs = context.getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
+            val cookie = prefs.getString("cookie", null)
+            
+            if (cookie.isNullOrEmpty()) {
+                Log.e("WidgetFactory", "Cookie is missing")
                 taskList = listOf(
                     Task(
-                        id = "error_network",
-                        title = "网络错误，点击刷新",
+                        id = "error_login",
+                        title = "未登录，请打开App刷新",
                         isCompleted = false,
                         priority = "High"
                     )
                 )
+                return
             }
+
+            runBlocking {
+                try {
+                    taskList = TaskRepository.fetchTasks()
+                    Log.d("WidgetFactory", "Fetched ${taskList.size} tasks")
+                    
+                    if (taskList.isEmpty()) {
+                        taskList = listOf(
+                            Task(
+                                id = "empty",
+                                title = "暂无待办事项",
+                                isCompleted = false,
+                                priority = "Low"
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    Log.e("WidgetFactory", "Error fetching tasks", e)
+                    taskList = listOf(
+                        Task(
+                            id = "error_network",
+                            title = "网络错误，点击刷新",
+                            isCompleted = false,
+                            priority = "High"
+                        )
+                    )
+                }
+            }
+        } finally {
+            Binder.restoreCallingIdentity(identity)
         }
     }
 
@@ -107,8 +127,11 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
         return views
     }
 
-    override fun getLoadingView(): RemoteViews? {
-        return null
+    override fun getLoadingView(): RemoteViews {
+        // Return a custom loading view
+        val views = RemoteViews(context.packageName, R.layout.widget_item)
+        views.setTextViewText(R.id.tv_task_title, "加载中...")
+        return views
     }
 
     override fun getViewTypeCount(): Int {
