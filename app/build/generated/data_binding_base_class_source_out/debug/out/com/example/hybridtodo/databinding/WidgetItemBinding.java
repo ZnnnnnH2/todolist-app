@@ -27,13 +27,13 @@ public final class WidgetItemBinding implements ViewBinding {
   public final TextView tvTaskTitle;
 
   @NonNull
-  public final View viewPriority;
+  public final ImageView viewPriority;
 
   @NonNull
   public final LinearLayout widgetItemRoot;
 
   private WidgetItemBinding(@NonNull LinearLayout rootView, @NonNull ImageView ivCheck,
-      @NonNull TextView tvTaskTitle, @NonNull View viewPriority,
+      @NonNull TextView tvTaskTitle, @NonNull ImageView viewPriority,
       @NonNull LinearLayout widgetItemRoot) {
     this.rootView = rootView;
     this.ivCheck = ivCheck;
@@ -82,7 +82,7 @@ public final class WidgetItemBinding implements ViewBinding {
       }
 
       id = R.id.view_priority;
-      View viewPriority = ViewBindings.findChildViewById(rootView, id);
+      ImageView viewPriority = ViewBindings.findChildViewById(rootView, id);
       if (viewPriority == null) {
         break missingId;
       }

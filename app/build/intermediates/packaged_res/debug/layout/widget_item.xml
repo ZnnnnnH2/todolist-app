@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_item_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="48dp"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="8dp"
-    android:background="@drawable/bg_widget_rounded">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:background="#FFFFFF">
 
     <ImageView
         android:id="@+id/iv_check"
@@ -27,12 +28,12 @@
         android:maxLines="1"
         android:ellipsize="end" />
 
-    <View
+    <ImageView
         android:id="@+id/view_priority"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/bg_widget_rounded"
-        android:backgroundTint="@color/priority_high" />
+        android:background="#FFAB40"
+        android:contentDescription="@null" />
 
 </LinearLayout>

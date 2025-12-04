@@ -3,11 +3,13 @@ package com.example.hybridtodo.data.model
 import com.google.gson.annotations.SerializedName
 
 data class Task(
-    val id: String,
-    val title: String,
-    @SerializedName("completed")
-    val isCompleted: Boolean,
-    val priority: String
+    val id: String = "",
+    val title: String = "",
+    val isCompleted: Boolean = false,
+    val priority: String = "Medium",
+    val description: String? = null,
+    val createdAt: String? = null,
+    val parentId: String? = null
 )
 
 data class ToggleTaskRequest(

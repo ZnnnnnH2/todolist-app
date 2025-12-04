@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import android.widget.Toast
 import com.example.hybridtodo.R
 import com.example.hybridtodo.data.repository.TaskRepository
+import com.example.hybridtodo.data.remote.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,20 +25,35 @@ class TodoListWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
+        Log.d("TodoListWidget", "onUpdate called for ${appWidgetIds.size} widgets")
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+        // Also notify data changed to trigger initial data load
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         
+        // Initialize RetrofitClient
+        RetrofitClient.init(context)
+        
         when (intent.action) {
             WidgetConstants.ACTION_REFRESH -> {
+                Log.d("TodoListWidget", "ACTION_REFRESH received")
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 val thisAppWidget = ComponentName(context.packageName, TodoListWidget::class.java.name)
                 val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
                 
+                Log.d("TodoListWidget", "Refreshing ${appWidgetIds.size} widgets")
+                
+                // Update widget layout first
+                for (appWidgetId in appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId)
+                }
+                
+                // Then notify data changed
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list)
                 Toast.makeText(context, "Refreshing...", Toast.LENGTH_SHORT).show()
             }
@@ -47,7 +63,7 @@ class TodoListWidget : AppWidgetProvider() {
                 
                 if (taskId != null) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val success = TaskRepository.toggleTask(taskId, !isCompleted) // Toggle status
+                        val success = TaskRepository.toggleTask(taskId, !isCompleted)
                         withContext(Dispatchers.Main) {
                             if (success) {
                                 val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -70,12 +86,12 @@ class TodoListWidget : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
+            Log.d("TodoListWidget", "updateAppWidget for id: $appWidgetId")
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
 
             // Set up the collection
             val intent = Intent(context, WidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                // Unique data URI per widget to avoid RemoteViewsFactory re-use/cache issues
                 data = Uri.parse("hybridtodo://widget/$appWidgetId")
             }
             views.setRemoteAdapter(R.id.widget_list, intent)
@@ -101,7 +117,7 @@ class TodoListWidget : AppWidgetProvider() {
                 context,
                 1,
                 toggleIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE // Mutable for fillInIntent
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             )
             views.setPendingIntentTemplate(R.id.widget_list, togglePendingIntent)
 

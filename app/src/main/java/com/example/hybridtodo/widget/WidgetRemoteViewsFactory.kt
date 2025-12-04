@@ -29,23 +29,7 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
         
         val identity = Binder.clearCallingIdentity()
         try {
-            // Check for cookies from SharedPreferences
-            val prefs = context.getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
-            val cookie = prefs.getString("cookie", null)
-            
-            if (cookie.isNullOrEmpty()) {
-                Log.e("WidgetFactory", "Cookie is missing")
-                taskList = listOf(
-                    Task(
-                        id = "error_login",
-                        title = "未登录，请打开App刷新",
-                        isCompleted = false,
-                        priority = "High"
-                    )
-                )
-                return
-            }
-
+            // API is public, no cookie required - directly fetch tasks
             runBlocking {
                 try {
                     taskList = TaskRepository.fetchTasks()
@@ -87,6 +71,7 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
     }
 
     override fun getViewAt(position: Int): RemoteViews {
+        Log.d("WidgetFactory", "getViewAt position: $position")
         if (position == -1 || position >= taskList.size) {
             return RemoteViews(context.packageName, R.layout.widget_item)
         }
@@ -94,35 +79,37 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
         val task = taskList[position]
         val views = RemoteViews(context.packageName, R.layout.widget_item)
 
-        views.setTextViewText(R.id.tv_task_title, task.title)
-
-        // Set Checkbox Icon
-        if (task.isCompleted) {
-            views.setImageViewResource(R.id.iv_check, R.drawable.ic_check_filled)
-        } else {
-            views.setImageViewResource(R.id.iv_check, R.drawable.ic_check_outline)
-        }
-
-        // Set Priority Color
-        val priorityColor = when (task.priority.lowercase()) {
-            "high" -> context.getColor(R.color.priority_high)
-            "medium" -> context.getColor(R.color.priority_medium)
-            "low" -> context.getColor(R.color.priority_low)
-            else -> context.getColor(R.color.teal_200)
-        }
-        
         try {
-            views.setInt(R.id.view_priority, "setBackgroundColor", priorityColor)
-        } catch (e: Exception) {
-            Log.e("WidgetFactory", "Error setting priority color", e)
-        }
+            views.setTextViewText(R.id.tv_task_title, task.title)
 
-        // Fill In Intent for Click
-        val fillInIntent = Intent().apply {
-            putExtra(WidgetConstants.EXTRA_TASK_ID, task.id)
-            putExtra(WidgetConstants.EXTRA_TASK_COMPLETED, task.isCompleted)
+            // Set Checkbox Icon
+            if (task.isCompleted) {
+                views.setImageViewResource(R.id.iv_check, R.drawable.ic_check_filled)
+            } else {
+                views.setImageViewResource(R.id.iv_check, R.drawable.ic_check_outline)
+            }
+
+            // Set Priority Color
+            val priorityColor = when (task.priority.lowercase()) {
+                "high" -> context.getColor(R.color.priority_high)
+                "medium" -> context.getColor(R.color.priority_medium)
+                "low" -> context.getColor(R.color.priority_low)
+                else -> context.getColor(R.color.teal_200)
+            }
+            
+            views.setInt(R.id.view_priority, "setBackgroundColor", priorityColor)
+
+            // Fill In Intent for Click
+            val fillInIntent = Intent().apply {
+                putExtra(WidgetConstants.EXTRA_TASK_ID, task.id)
+                putExtra(WidgetConstants.EXTRA_TASK_COMPLETED, task.isCompleted)
+            }
+            views.setOnClickFillInIntent(R.id.widget_item_root, fillInIntent)
+            
+            Log.d("WidgetFactory", "Successfully prepared view for task: ${task.title}")
+        } catch (e: Exception) {
+            Log.e("WidgetFactory", "Error in getViewAt for position $position", e)
         }
-        views.setOnClickFillInIntent(R.id.widget_item_root, fillInIntent)
 
         return views
     }

@@ -26,41 +26,72 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupWebView() {
+        // Enable cookies for WebView BEFORE loading URL
+        val cookieManager = android.webkit.CookieManager.getInstance()
+        cookieManager.setAcceptCookie(true)
+        cookieManager.setAcceptThirdPartyCookies(binding.webview, true)
+        
         binding.webview.apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             
             // Ensure links open within the WebView
             webViewClient = object : WebViewClient() {
-                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                override fun shouldOverrideUrlLoading(view: WebView?, request: android.webkit.WebResourceRequest?): Boolean {
+                    // Check for cookies on every navigation
+                    saveCookiesIfAvailable(request?.url?.toString())
                     return false // Let WebView handle the URL
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    android.webkit.CookieManager.getInstance().flush()
-
-                    // Save Cookie to SharedPreferences
-                    val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
-                    if (!cookie.isNullOrEmpty()) {
-                        val prefs = getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
-                        prefs.edit().putString("cookie", cookie).apply()
-                        
-                        // Also update CookieStore for consistency if needed, but relying on prefs now
-                        CookieStore.saveCookie(cookie)
-
-                        // Notify Widget to refresh data (trigger onDataSetChanged)
-                        val appWidgetManager = AppWidgetManager.getInstance(application)
-                        val ids = appWidgetManager.getAppWidgetIds(ComponentName(application, TodoListWidget::class.java))
-                        
-                        // This triggers onDataSetChanged in WidgetRemoteViewsFactory
-                        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list)
-                    }
+                    android.util.Log.d("MainActivity", "=== onPageFinished ===")
+                    android.util.Log.d("MainActivity", "URL: $url")
+                    
+                    saveCookiesIfAvailable(url)
+                }
+                
+                override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                    super.doUpdateVisitedHistory(view, url, isReload)
+                    // This is called when URL changes (e.g., after login redirect)
+                    android.util.Log.d("MainActivity", "=== doUpdateVisitedHistory ===")
+                    android.util.Log.d("MainActivity", "URL: $url, isReload: $isReload")
+                    saveCookiesIfAvailable(url)
                 }
             }
 
             // Load the Next.js app URL
-            loadUrl("http://20.193.248.140/") // Replace with actual URL
+            android.util.Log.d("MainActivity", "Loading URL: http://20.193.248.140/")
+            loadUrl("http://20.193.248.140/")
+        }
+    }
+    
+    private fun saveCookiesIfAvailable(url: String?) {
+        if (url == null) return
+        
+        android.webkit.CookieManager.getInstance().flush()
+        val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+        android.util.Log.d("MainActivity", "Checking cookies for URL: $url")
+        android.util.Log.d("MainActivity", "Cookie: ${cookie?.take(100) ?: "NULL"}")
+        
+        if (!cookie.isNullOrEmpty()) {
+            val prefs = getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
+            val existingCookie = prefs.getString("cookie", null)
+            
+            // Only save if cookie is different (new login or updated)
+            if (cookie != existingCookie) {
+                val success = prefs.edit().putString("cookie", cookie).commit()
+                android.util.Log.d("MainActivity", "NEW Cookie saved! Success: $success")
+                android.util.Log.d("MainActivity", "Cookie content: ${cookie.take(100)}")
+                
+                CookieStore.saveCookie(cookie)
+
+                // Notify Widget to refresh
+                val appWidgetManager = AppWidgetManager.getInstance(application)
+                val ids = appWidgetManager.getAppWidgetIds(ComponentName(application, TodoListWidget::class.java))
+                android.util.Log.d("MainActivity", "Notifying ${ids.size} widgets to refresh")
+                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list)
+            }
         }
     }
 

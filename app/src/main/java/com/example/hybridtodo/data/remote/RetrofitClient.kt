@@ -21,22 +21,20 @@ object RetrofitClient {
         }
     }
 
-    // Cookie Interceptor - reads cookie dynamically from SharedPreferences on each request
+    // Cookie Interceptor - optional for authenticated APIs
     private val cookieInterceptor by lazy {
         okhttp3.Interceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
             
-            // Get Cookie from SharedPreferences - this runs on each request so appContext should be set
+            // Try to add cookie if available (for future authenticated APIs)
             appContext?.let { ctx ->
                 val prefs = ctx.getSharedPreferences("widget_auth", Context.MODE_PRIVATE)
                 val cookie = prefs.getString("cookie", null)
-                android.util.Log.d("RetrofitClient", "Cookie from prefs: ${cookie?.take(50)}...")
                 if (!cookie.isNullOrEmpty()) {
                     requestBuilder.addHeader("Cookie", cookie)
+                    android.util.Log.d("RetrofitClient", "Added cookie to request")
                 }
-            } ?: run {
-                android.util.Log.e("RetrofitClient", "appContext is null! Cookie will not be sent.")
             }
             
             chain.proceed(requestBuilder.build())
