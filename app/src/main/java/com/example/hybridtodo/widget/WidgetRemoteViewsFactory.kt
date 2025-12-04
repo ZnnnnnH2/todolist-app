@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 
 class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsService.RemoteViewsFactory {
 
-    private var taskList: List<Task> = emptyList()
+    private var displayList: List<DisplayTask> = emptyList()
 
     override fun onCreate() {
         // Initialize data source if needed
@@ -27,32 +27,42 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
         // Initialize RetrofitClient
         RetrofitClient.init(context)
         
+        val prefs = context.getSharedPreferences(WidgetConstants.PREFS_WIDGET, Context.MODE_PRIVATE)
+        val hideCompleted = prefs.getBoolean(WidgetConstants.PREF_HIDE_COMPLETED, false)
+
         val identity = Binder.clearCallingIdentity()
         try {
             // API is public, no cookie required - directly fetch tasks
             runBlocking {
                 try {
-                    taskList = TaskRepository.fetchTasks()
-                    Log.d("WidgetFactory", "Fetched ${taskList.size} tasks")
-                    
-                    if (taskList.isEmpty()) {
-                        taskList = listOf(
-                            Task(
-                                id = "empty",
-                                title = "暂无待办事项",
-                                isCompleted = false,
-                                priority = "Low"
+                    var fetched = TaskRepository.fetchTasks()
+                    if (hideCompleted) {
+                        fetched = fetched.filter { !it.isCompleted }
+                    }
+                    displayList = buildDisplayList(fetched)
+                    Log.d("WidgetFactory", "Fetched ${displayList.size} tasks for display")
+                    if (displayList.isEmpty()) {
+                        displayList = listOf(
+                            DisplayTask(
+                                Task(
+                                    id = "empty",
+                                    title = "暂无待办事项",
+                                    isCompleted = false,
+                                    priority = "Low"
+                                )
                             )
                         )
                     }
                 } catch (e: Exception) {
                     Log.e("WidgetFactory", "Error fetching tasks", e)
-                    taskList = listOf(
-                        Task(
-                            id = "error_network",
-                            title = "网络错误，点击刷新",
-                            isCompleted = false,
-                            priority = "High"
+                    displayList = listOf(
+                        DisplayTask(
+                            Task(
+                                id = "error_network",
+                                title = "网络错误，点击刷新",
+                                isCompleted = false,
+                                priority = "High"
+                            )
                         )
                     )
                 }
@@ -63,24 +73,26 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
     }
 
     override fun onDestroy() {
-        taskList = emptyList()
+        displayList = emptyList()
     }
 
     override fun getCount(): Int {
-        return taskList.size
+        return displayList.size
     }
 
     override fun getViewAt(position: Int): RemoteViews {
         Log.d("WidgetFactory", "getViewAt position: $position")
-        if (position == -1 || position >= taskList.size) {
+        if (position == -1 || position >= displayList.size) {
             return RemoteViews(context.packageName, R.layout.widget_item)
         }
 
-        val task = taskList[position]
+        val display = displayList[position]
+        val task = display.task
         val views = RemoteViews(context.packageName, R.layout.widget_item)
 
         try {
-            views.setTextViewText(R.id.tv_task_title, task.title)
+            val prefix = if (display.depth > 0) "↳ ".repeat(display.depth.coerceAtMost(3)) else ""
+            views.setTextViewText(R.id.tv_task_title, prefix + task.title)
 
             // Set Checkbox Icon
             if (task.isCompleted) {
@@ -132,4 +144,36 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
     override fun hasStableIds(): Boolean {
         return true
     }
+
+    private fun buildDisplayList(tasks: List<Task>): List<DisplayTask> {
+        if (tasks.isEmpty()) return emptyList()
+
+        val tasksById = tasks.associateBy { it.id }
+        val childrenMap = tasks.groupBy { it.parentId }
+
+        val display = mutableListOf<DisplayTask>()
+
+        fun addTaskWithChildren(task: Task, depth: Int) {
+            display.add(DisplayTask(task, depth))
+            childrenMap[task.id]?.forEach { child ->
+                addTaskWithChildren(child, depth + 1)
+            }
+        }
+
+        val roots = tasks.filter { it.parentId == null || !tasksById.containsKey(it.parentId) }
+        roots.forEach { addTaskWithChildren(it, 0) }
+
+        // Edge case: tasks whose parent is in list but came earlier are already included above.
+        // If anything is left out (cycle), append it as root to avoid missing entries.
+        if (display.size < tasks.size) {
+            tasks.forEach { if (!display.any { existing -> existing.task.id == it.id }) display.add(DisplayTask(it, 0)) }
+        }
+
+        return display
+    }
 }
+
+data class DisplayTask(
+    val task: Task,
+    val depth: Int = 0
+)

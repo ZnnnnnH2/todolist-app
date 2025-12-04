@@ -20,3 +20,10 @@ data class ToggleTaskRequest(
 data class BasicResponse(
     val success: Boolean
 )
+
+data class CreateTaskRequest(
+    val title: String,
+    val description: String? = null,
+    val priority: String = "Medium",
+    val parentId: String? = null
+)

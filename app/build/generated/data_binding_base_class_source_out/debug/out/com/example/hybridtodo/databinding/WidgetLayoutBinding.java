@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,10 +23,22 @@ public final class WidgetLayoutBinding implements ViewBinding {
   private final RelativeLayout rootView;
 
   @NonNull
+  public final ImageButton btnAdd;
+
+  @NonNull
+  public final ImageButton btnFilter;
+
+  @NonNull
   public final ImageButton btnRefresh;
 
   @NonNull
   public final TextView emptyView;
+
+  @NonNull
+  public final LinearLayout headerActions;
+
+  @NonNull
+  public final LinearLayout headerContainer;
 
   @NonNull
   public final TextView tvTitle;
@@ -33,11 +46,17 @@ public final class WidgetLayoutBinding implements ViewBinding {
   @NonNull
   public final ListView widgetList;
 
-  private WidgetLayoutBinding(@NonNull RelativeLayout rootView, @NonNull ImageButton btnRefresh,
-      @NonNull TextView emptyView, @NonNull TextView tvTitle, @NonNull ListView widgetList) {
+  private WidgetLayoutBinding(@NonNull RelativeLayout rootView, @NonNull ImageButton btnAdd,
+      @NonNull ImageButton btnFilter, @NonNull ImageButton btnRefresh, @NonNull TextView emptyView,
+      @NonNull LinearLayout headerActions, @NonNull LinearLayout headerContainer,
+      @NonNull TextView tvTitle, @NonNull ListView widgetList) {
     this.rootView = rootView;
+    this.btnAdd = btnAdd;
+    this.btnFilter = btnFilter;
     this.btnRefresh = btnRefresh;
     this.emptyView = emptyView;
+    this.headerActions = headerActions;
+    this.headerContainer = headerContainer;
     this.tvTitle = tvTitle;
     this.widgetList = widgetList;
   }
@@ -69,6 +88,18 @@ public final class WidgetLayoutBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btn_add;
+      ImageButton btnAdd = ViewBindings.findChildViewById(rootView, id);
+      if (btnAdd == null) {
+        break missingId;
+      }
+
+      id = R.id.btn_filter;
+      ImageButton btnFilter = ViewBindings.findChildViewById(rootView, id);
+      if (btnFilter == null) {
+        break missingId;
+      }
+
       id = R.id.btn_refresh;
       ImageButton btnRefresh = ViewBindings.findChildViewById(rootView, id);
       if (btnRefresh == null) {
@@ -78,6 +109,18 @@ public final class WidgetLayoutBinding implements ViewBinding {
       id = R.id.empty_view;
       TextView emptyView = ViewBindings.findChildViewById(rootView, id);
       if (emptyView == null) {
+        break missingId;
+      }
+
+      id = R.id.header_actions;
+      LinearLayout headerActions = ViewBindings.findChildViewById(rootView, id);
+      if (headerActions == null) {
+        break missingId;
+      }
+
+      id = R.id.header_container;
+      LinearLayout headerContainer = ViewBindings.findChildViewById(rootView, id);
+      if (headerContainer == null) {
         break missingId;
       }
 
@@ -93,8 +136,8 @@ public final class WidgetLayoutBinding implements ViewBinding {
         break missingId;
       }
 
-      return new WidgetLayoutBinding((RelativeLayout) rootView, btnRefresh, emptyView, tvTitle,
-          widgetList);
+      return new WidgetLayoutBinding((RelativeLayout) rootView, btnAdd, btnFilter, btnRefresh,
+          emptyView, headerActions, headerContainer, tvTitle, widgetList);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

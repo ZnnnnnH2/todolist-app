@@ -24,7 +24,7 @@
 17-->[androidx.core:core:1.12.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\fa491052a0c4e52c4bc12c333827ee1c\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
 18
 19    <application
-19-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:7:5-50:19
+19-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:7:5-54:19
 20        android:name="com.example.hybridtodo.HybridTodoApp"
 20-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:8:9-38
 21        android:allowBackup="true"
@@ -66,110 +66,116 @@
 39-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:25:27-74
 40            </intent-filter>
 41        </activity>
-42
-43        <!-- Widget Receiver -->
-44        <receiver
-44-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:30:9-42:20
-45            android:name="com.example.hybridtodo.widget.TodoListWidget"
-45-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:31:13-50
-46            android:exported="true" >
-46-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:32:13-36
-47            <intent-filter>
-47-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:33:13-37:29
-48                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-48-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:34:17-84
-48-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:34:25-81
-49                <action android:name="com.example.hybridtodo.ACTION_REFRESH" />
-49-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:35:17-80
-49-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:35:25-77
-50                <action android:name="com.example.hybridtodo.ACTION_TOGGLE_TASK" />
-50-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:36:17-84
-50-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:36:25-81
-51            </intent-filter>
-52
-53            <meta-data
-53-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:39:13-41:65
-54                android:name="android.appwidget.provider"
-54-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:40:17-58
-55                android:resource="@xml/todo_list_widget_info" />
-55-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:41:17-62
-56        </receiver>
-57
-58        <!-- Widget Service -->
-59        <service
-59-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:45:9-48:39
-60            android:name="com.example.hybridtodo.widget.WidgetService"
-60-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:46:13-49
-61            android:exported="true"
-61-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:48:13-36
-62            android:permission="android.permission.BIND_REMOTEVIEWS" />
-62-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:47:13-69
-63
-64        <provider
-64-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-65            android:name="androidx.startup.InitializationProvider"
-65-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-66            android:authorities="com.example.hybridtodo.androidx-startup"
-66-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
-67            android:exported="false" >
-67-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-68            <meta-data
-68-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-69                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-69-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-70                android:value="androidx.startup" />
-70-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+42        <activity
+42-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:29:9-31:40
+43            android:name="com.example.hybridtodo.ui.AddTaskActivity"
+43-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:30:13-47
+44            android:exported="false" />
+44-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:31:13-37
+45
+46        <!-- Widget Receiver -->
+47        <receiver
+47-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:34:9-46:20
+48            android:name="com.example.hybridtodo.widget.TodoListWidget"
+48-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:35:13-50
+49            android:exported="true" >
+49-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:36:13-36
+50            <intent-filter>
+50-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:37:13-41:29
+51                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+51-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:38:17-84
+51-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:38:25-81
+52                <action android:name="com.example.hybridtodo.ACTION_REFRESH" />
+52-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:39:17-80
+52-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:39:25-77
+53                <action android:name="com.example.hybridtodo.ACTION_TOGGLE_TASK" />
+53-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:40:17-84
+53-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:40:25-81
+54            </intent-filter>
+55
+56            <meta-data
+56-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:43:13-45:65
+57                android:name="android.appwidget.provider"
+57-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:44:17-58
+58                android:resource="@xml/todo_list_widget_info" />
+58-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:45:17-62
+59        </receiver>
+60
+61        <!-- Widget Service -->
+62        <service
+62-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:49:9-52:39
+63            android:name="com.example.hybridtodo.widget.WidgetService"
+63-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:50:13-49
+64            android:exported="true"
+64-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:52:13-36
+65            android:permission="android.permission.BIND_REMOTEVIEWS" />
+65-->D:\everythingaboutprograming\todolistapp\app\src\main\AndroidManifest.xml:51:13-69
+66
+67        <provider
+67-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+68            android:name="androidx.startup.InitializationProvider"
+68-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+69            android:authorities="com.example.hybridtodo.androidx-startup"
+69-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+70            android:exported="false" >
+70-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
 71            <meta-data
-71-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
-72                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-72-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
+71-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+72                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+72-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
 73                android:value="androidx.startup" />
-73-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
+73-->[androidx.emoji2:emoji2:1.2.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\a40399bbfdf69ce0fabac4f525e770e7\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
 74            <meta-data
-74-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-75                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-75-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+74-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
+75                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+75-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
 76                android:value="androidx.startup" />
-76-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
-77        </provider>
-78
-79        <receiver
-79-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
-80            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
-81            android:directBootAware="false"
-81-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
-82            android:enabled="true"
-82-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
-83            android:exported="true"
-83-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
-84            android:permission="android.permission.DUMP" >
-84-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
-85            <intent-filter>
-85-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
-86                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
-87            </intent-filter>
+76-->[androidx.lifecycle:lifecycle-process:2.6.1] D:\gradle-8.13\caches\9.0-milestone-1\transforms\214760af31167c936452a3054e0cdf0b\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
+77            <meta-data
+77-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+78                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+78-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+79                android:value="androidx.startup" />
+79-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+80        </provider>
+81
+82        <receiver
+82-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+83            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+83-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+84            android:directBootAware="false"
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+85            android:enabled="true"
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+86            android:exported="true"
+86-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+87            android:permission="android.permission.DUMP" >
+87-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
 88            <intent-filter>
-88-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
-89                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+89                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
 90            </intent-filter>
 91            <intent-filter>
-91-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
-92                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-92-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
-92-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+92                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
 93            </intent-filter>
 94            <intent-filter>
-94-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
-95                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-95-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
-95-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+95                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
 96            </intent-filter>
-97        </receiver>
-98    </application>
-99
-100</manifest>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+98                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] D:\gradle-8.13\caches\9.0-milestone-1\transforms\f9953b3adf2f840cbb4137f28a684aab\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+99            </intent-filter>
+100        </receiver>
+101    </application>
+102
+103</manifest>

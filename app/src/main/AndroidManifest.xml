@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.AddTaskActivity"
+            android:exported="false" />
+
         <!-- Widget Receiver -->
         <receiver
             android:name=".widget.TodoListWidget"
