@@ -12,8 +12,24 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    // Cookie Interceptor to share cookies from WebView
+    private val cookieInterceptor = okhttp3.Interceptor { chain ->
+        val original = chain.request()
+        val requestBuilder = original.newBuilder()
+        
+        // Get Cookie from WebView's CookieManager
+        val url = original.url.toString()
+        val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+        if (!cookie.isNullOrEmpty()) {
+            requestBuilder.addHeader("Cookie", cookie)
+        }
+        
+        chain.proceed(requestBuilder.build())
+    }
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(cookieInterceptor)
         .build()
 
     val apiService: ApiService by lazy {

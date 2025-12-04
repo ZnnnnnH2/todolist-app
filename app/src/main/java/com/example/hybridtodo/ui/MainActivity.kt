@@ -29,6 +29,12 @@ class MainActivity : AppCompatActivity() {
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     return false // Let WebView handle the URL
                 }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    // Force sync cookies to storage so Widget can read them
+                    android.webkit.CookieManager.getInstance().flush()
+                }
             }
 
             // Load the Next.js app URL

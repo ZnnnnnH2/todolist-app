@@ -22,13 +22,38 @@ class WidgetRemoteViewsFactory(private val context: Context) : RemoteViewsServic
     override fun onDataSetChanged() {
         // Fetch data synchronously
         Log.d("WidgetFactory", "onDataSetChanged called")
+        
+        // Check for cookies
+        val url = "http://20.193.248.140/"
+        val cookie = android.webkit.CookieManager.getInstance().getCookie(url)
+        
+        if (cookie.isNullOrEmpty()) {
+            Log.e("WidgetFactory", "Cookie is missing")
+            taskList = listOf(
+                Task(
+                    id = "error_login",
+                    title = "未登录，请打开App刷新",
+                    isCompleted = false,
+                    priority = "High"
+                )
+            )
+            return
+        }
+
         runBlocking {
             try {
                 taskList = TaskRepository.fetchTasks()
                 Log.d("WidgetFactory", "Fetched ${taskList.size} tasks")
             } catch (e: Exception) {
                 Log.e("WidgetFactory", "Error fetching tasks", e)
-                taskList = emptyList()
+                taskList = listOf(
+                    Task(
+                        id = "error_network",
+                        title = "网络错误，点击刷新",
+                        isCompleted = false,
+                        priority = "High"
+                    )
+                )
             }
         }
     }
